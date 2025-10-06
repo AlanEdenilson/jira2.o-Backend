@@ -5,8 +5,30 @@ import { ProjectModule } from './project/project.module';
 import { TaskModule } from './task/task.module';
 import { UserModule } from './user/user.module';
 
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
+
 @Module({
-  imports: [ProjectModule, TaskModule, UserModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: 'mysql-test-esfe-8ff0.b.aivencloud.com',
+      port: 20787,
+      username: 'avnadmin',
+      password: process.env.DB_PASSWORD,
+      database: 'jira2_0',
+      logging: true,
+      synchronize: false,
+      autoLoadEntities: true,
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+    }),
+    ProjectModule,
+    TaskModule,
+    UserModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -7,12 +7,7 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-
-export enum ProjectStatus {
-  ACTIVO = 'activo',
-  COMPLETADO = 'completado',
-  CANCELADO = 'cancelado',
-}
+import { ProjectStatus } from '../Type/Type';
 
 @Entity('projects')
 export class Project {
