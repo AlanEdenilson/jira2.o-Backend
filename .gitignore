@@ -44,7 +44,7 @@ lerna-debug.log*
 .env.production.local
 .env.local
 
-jira2.0/src/app.module.ts
+
 
 # temp directory
 .temp
