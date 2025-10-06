@@ -28,6 +28,8 @@ lerna-debug.log*
 .settings/
 *.sublime-workspace
 
+/home/alan/Escritorio/jira2.0/jira2.0/src/app.module.ts
+
 # IDE - VSCode
 .vscode/*
 !.vscode/settings.json
