@@ -1,9 +1,14 @@
+import { Project } from 'src/project/entities/project.entity';
+import { User } from 'src/user/entities/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
+  OneToOne,
 } from 'typeorm';
 
 export enum TaskStatus {
@@ -44,5 +49,10 @@ export class Task {
   @Column({ default: true })
   isActive: boolean;
 
-  // Relaciones
+  @ManyToOne(() => Project, (project) => project.task)
+  project: Project;
+
+  @OneToOne(() => User)
+  @JoinColumn()
+  user: User;
 }

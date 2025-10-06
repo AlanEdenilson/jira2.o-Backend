@@ -1,9 +1,11 @@
+import { Task } from 'src/task/entities/task.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 export enum ProjectStatus {
@@ -41,4 +43,7 @@ export class Project {
 
   @Column({ default: true })
   isActive: boolean;
+
+  @OneToMany(() => Task, (task) => task.project)
+  task: Task[];
 }
