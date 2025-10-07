@@ -3,4 +3,5 @@ export interface Response {
   ok: boolean;
   message: string;
   data?: any;
+  total?: number;
 }

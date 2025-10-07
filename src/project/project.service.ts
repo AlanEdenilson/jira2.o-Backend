@@ -4,6 +4,7 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Project } from './entities/project.entity';
 import { Repository } from 'typeorm';
+import { Response } from 'src/Response';
 
 @Injectable()
 export class ProjectService {
@@ -12,14 +13,16 @@ export class ProjectService {
     private repository: Repository<Project>,
   ) {}
 
-  create(createProjectDto: CreateProjectDto) {
-    return this.repository.save(createProjectDto);
+  create(createProjectDto: CreateProjectDto): Response {
+    return {
+      status: 201,
+      ok: true,
+      message: 'Proyecto creado con exito',
+      data: this.repository.create(createProjectDto),
+    };
   }
 
-  async findAll(
-    page: number,
-    pageSize: number,
-  ): Promise<{ data: Project[]; total: number }> {
+  async findAll(page: number, pageSize: number): Promise<Response> {
     const [result, total] = await this.repository
       .createQueryBuilder()
       .where('Project.isActive = :estado', { estado: true })
@@ -27,10 +30,16 @@ export class ProjectService {
       .take(pageSize)
       .getManyAndCount();
 
-    return { data: result, total: total };
+    return {
+      status: 200,
+      ok: true,
+      message: 'Proyectos encontrados con exito',
+      data: result,
+      total: total,
+    };
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<Project> {
     try {
       const project = await this.repository.findOne({
         where: {
@@ -58,7 +67,7 @@ export class ProjectService {
   async update(
     id: number,
     updateProjectDto: UpdateProjectDto,
-  ): Promise<Project> {
+  ): Promise<Response> {
     const project = await this.repository.findOneBy({ id: id });
 
     if (!project) {
@@ -68,10 +77,15 @@ export class ProjectService {
 
     const result = await this.repository.save(project);
 
-    return result;
+    return {
+      status: 200,
+      ok: true,
+      message: 'Proyecto actualizado con exito',
+      data: result,
+    };
   }
 
-  async remove(id: number): Promise<boolean> {
+  async remove(id: number): Promise<Response> {
     try {
       const project = await this.repository.findOne({
         where: { id, isActive: true },
@@ -88,7 +102,12 @@ export class ProjectService {
         .where('id =:id', { id })
         .execute();
 
-      return rs.affected != undefined && rs.affected > 0;
+      return {
+        status: 200,
+        ok: true,
+        message: 'Proyecto eliminado con exito',
+        data: rs.affected != undefined && rs.affected > 0,
+      };
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       throw new Error('error al borrar el proyecto');

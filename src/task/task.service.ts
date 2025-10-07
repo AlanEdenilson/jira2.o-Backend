@@ -3,7 +3,7 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from './entities/task.entity';
 import { Repository } from 'typeorm';
-import { Response } from './Response';
+import { Response } from '../Response';
 
 @Injectable()
 export class TaskService {
@@ -51,11 +51,7 @@ export class TaskService {
     }
   }
 
-  async findAll(
-    page: number,
-    pageSize: number,
-    id: number,
-  ): Promise<{ data: Task[]; total: number }> {
+  async findAll(page: number, pageSize: number, id: number): Promise<Response> {
     /*const [result, total] = await this.repository
       .createQueryBuilder()
       .where('Project.isActive = :estado', { estado: true })
@@ -72,10 +68,16 @@ export class TaskService {
       take: pageSize,
     });
 
-    return { data: result, total: total };
+    return {
+      status: 200,
+      ok: true,
+      message: 'Tareas encontradas con exito',
+      data: result,
+      total: total,
+    };
   }
 
-  async update(id: number, updateTaskDto: UpdateTaskDto): Promise<Task> {
+  async update(id: number, updateTaskDto: UpdateTaskDto): Promise<Response> {
     const task = await this.repository.findOneBy({ id: id });
 
     if (!task) {
@@ -85,10 +87,15 @@ export class TaskService {
 
     const result = await this.repository.save(task);
 
-    return result;
+    return {
+      status: 200,
+      ok: true,
+      message: 'Tarea actualizada con exito',
+      data: result,
+    };
   }
 
-  async remove(id: number): Promise<boolean> {
+  async remove(id: number): Promise<Response> {
     try {
       const task = await this.repository.findOne({
         where: { id, isActive: true },
@@ -105,7 +112,13 @@ export class TaskService {
         .where('id =:id', { id })
         .execute();
 
-      return rs.affected != undefined && rs.affected > 0;
+      return {
+        status: 200,
+        ok: true,
+        message: 'Tarea eliminada con exito',
+        data: rs.affected != undefined && rs.affected > 0,
+      };
+
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       throw new Error('error al borrar el proyecto');
