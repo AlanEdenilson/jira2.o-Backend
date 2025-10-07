@@ -30,11 +30,29 @@ export class ProjectService {
     return { data: result, total: total };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} project`;
+  async findOne(id: number) {
+    try {
+      const project = await this.repository.find({
+        where: {
+          id: id,
+          isActive: true,
+        },
+      });
+      if (!project) {
+        throw new HttpException('Category not found', HttpStatus.BAD_REQUEST);
+      }
+
+      return project;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
   }
 
-  async update(id: number, updateProjectDto: UpdateProjectDto) {
+  async update(
+    id: number,
+    updateProjectDto: UpdateProjectDto,
+  ): Promise<Project> {
     const project = await this.repository.findOneBy({ id: id });
 
     if (!project) {
@@ -47,28 +65,27 @@ export class ProjectService {
     return result;
   }
 
-  async remove(id: number) {
-    const project = await this.repository.find({
-      where: {
-        id: id,
-        isActive: true,
-      },
-    });
-    if (!project) {
-      throw new HttpException('Category not found', HttpStatus.BAD_REQUEST);
+  async remove(id: number): Promise<boolean> {
+    try {
+      const project = await this.repository.findOne({
+        where: { id, isActive: true },
+      });
+
+      if (!project) {
+        throw new Error('proyecto no encontrado no encontrada');
+      }
+
+      const rs = await this.repository
+        .createQueryBuilder()
+        .update(Project)
+        .set({ isActive: false })
+        .where('id =:id', { id })
+        .execute();
+
+      return rs.affected != undefined && rs.affected > 0;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      throw new Error('error al borrar el proyecto');
     }
-
-    const rs = await this.repository
-      .createQueryBuilder()
-      .update(Project)
-      .set({ isActive: false })
-      .where('id = :id', { id: id })
-      .execute();
-
-    if (rs.affected !== undefined && rs.affected > 0) {
-      throw new HttpException('User usessfuly', HttpStatus.OK);
-    }
-
-    throw new HttpException('Error al borar el item', HttpStatus.BAD_REQUEST);
   }
 }
