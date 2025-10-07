@@ -4,7 +4,7 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Project } from './entities/project.entity';
 import { Repository } from 'typeorm';
-import { Response } from 'src/Response';
+import { Response } from '../Response';
 
 @Injectable()
 export class ProjectService {
