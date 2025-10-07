@@ -1,0 +1,16 @@
+{
+  "projects": [
+    {
+      "name": "Sistema de Inventario",
+      "description": "Desarrollo de un sistema de gestión de inventario para la empresa",
+      "status": "activo",
+      "color": "#4A90E2"
+    },
+    {
+      "name": "Portal E-commerce",
+      "description": "Implementación de tienda en línea con carrito de compras",
+      "status": "completado",
+      "color": "#50E3C2"
+    }
+  ]
+}
