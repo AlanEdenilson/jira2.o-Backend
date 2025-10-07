@@ -21,12 +21,6 @@ export class Task {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  projectId: number;
-
-  @Column()
-  usersId: number;
-
   @Column({ type: 'varchar', length: 255 })
   title: string;
 

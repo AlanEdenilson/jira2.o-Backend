@@ -32,10 +32,13 @@ export class ProjectService {
 
   async findOne(id: number) {
     try {
-      const project = await this.repository.find({
+      const project = await this.repository.findOne({
         where: {
           id: id,
           isActive: true,
+        },
+        relations: {
+          task: true,
         },
       });
       if (!project) {
@@ -45,7 +48,10 @@ export class ProjectService {
       return project;
     } catch (error) {
       console.log(error);
-      throw error;
+      throw new HttpException(
+        'Error al buscar el proyecto',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
