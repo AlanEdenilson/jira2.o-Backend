@@ -24,7 +24,7 @@ console.log(process.env.DB_PASSWORD);
       password: process.env.DB_PASSWORD,
       database: 'jira2_0',
       logging: true,
-      synchronize: false,
+      synchronize: true,
       autoLoadEntities: true,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
     }),

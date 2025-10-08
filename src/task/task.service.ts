@@ -34,6 +34,10 @@ export class TaskService {
           id: id,
           isActive: true,
         },
+        relations: {
+          user: true,
+          project: true,
+        },
       });
       if (!project) {
         throw new HttpException('Category not found', HttpStatus.BAD_REQUEST);
@@ -78,21 +82,40 @@ export class TaskService {
   }
 
   async update(id: number, updateTaskDto: UpdateTaskDto): Promise<Response> {
-    const task = await this.repository.findOneBy({ id: id });
+    console.log(updateTaskDto);
 
-    if (!task) {
-      throw new HttpException('Project not found', HttpStatus.BAD_REQUEST);
+    try {
+      const task = await this.repository.findOne({
+        where: { id: id },
+        relations: { project: true, user: true },
+      });
+
+      console.log(task);
+
+      if (!task) {
+        throw new HttpException('Project not found', HttpStatus.BAD_REQUEST);
+      }
+      this.repository.merge(task, {
+        ...updateTaskDto,
+        user: { id: updateTaskDto.userId },
+      });
+
+      const result = await this.repository.save(task);
+
+      return {
+        status: 200,
+        ok: true,
+        message: 'Tarea actualizada con exito',
+        data: result,
+      };
+    } catch (error) {
+      return {
+        status: 400,
+        ok: true,
+        message: 'Tarea error',
+        data: [],
+      };
     }
-    this.repository.merge(task, updateTaskDto);
-
-    const result = await this.repository.save(task);
-
-    return {
-      status: 200,
-      ok: true,
-      message: 'Tarea actualizada con exito',
-      data: result,
-    };
   }
 
   async remove(id: number): Promise<Response> {

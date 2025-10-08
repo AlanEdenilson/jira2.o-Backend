@@ -8,7 +8,6 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
-  OneToOne,
 } from 'typeorm';
 
 export enum TaskStatus {
@@ -46,7 +45,7 @@ export class Task {
   @ManyToOne(() => Project, (project) => project.task)
   project: Project;
 
-  @OneToOne(() => User)
+  @ManyToOne(() => User)
   @JoinColumn()
   user: User;
 }
