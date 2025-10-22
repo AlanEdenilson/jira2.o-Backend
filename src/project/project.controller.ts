@@ -16,8 +16,20 @@ export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
   @Post()
-  create(@Body() createProjectDto: CreateProjectDto) {
-    return this.projectService.create(createProjectDto);
+  async create(@Body() createProjectDto: CreateProjectDto) {
+    try {
+      return this.projectService.create(createProjectDto);
+    } catch (error) {
+      console.log(error)
+      return {
+      status: 500,
+      ok: true,
+      message: 'Error ene l servidor',
+      data: error,
+    };
+      
+    }
+    
   }
 
   @Get()

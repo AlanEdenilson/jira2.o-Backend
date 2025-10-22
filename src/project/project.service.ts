@@ -13,7 +13,7 @@ export class ProjectService {
     private repository: Repository<Project>,
   ) {}
 
-  create(createProjectDto: CreateProjectDto): Response {
+  async create(createProjectDto: CreateProjectDto):Promise< Response> {
     return {
       status: 201,
       ok: true,
