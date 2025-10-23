@@ -18,7 +18,7 @@ export class ProjectService {
       status: 201,
       ok: true,
       message: 'Proyecto creado con exito',
-      data: this.repository.create(createProjectDto),
+      data: await this.repository.save(createProjectDto),
     };
   }
 

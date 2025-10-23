@@ -6,6 +6,7 @@ import {
   Param,
   Delete,
   Patch,
+  Query,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
@@ -33,9 +34,9 @@ export class ProjectController {
   }
 
   @Get()
-  async findAll() {
+  async findAll(@Query('page') page: string, @Query('pageSize') pageSize: string) {
     try {
-      return this.projectService.findAll(1, 10);
+      return this.projectService.findAll(+page, +pageSize);
     } catch (error) {
       console.log(error);
       throw error;
