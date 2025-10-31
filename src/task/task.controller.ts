@@ -8,7 +8,7 @@ import {
   Delete,
   Query,
 } from '@nestjs/common';
-import { TaskService } from './task.service';
+import { TaskService, TaskStatus } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { ProjectService } from 'src/project/project.service';
@@ -56,6 +56,14 @@ export class TaskController {
       parseInt(pageSize),
       parseInt(id),
     );
+  }
+
+  @Get('two')
+  findForParams(
+    @Query('project') project: string,
+    @Query('estado') estado: TaskStatus,
+  ) {
+    return this.taskService.findForParametros(parseInt(project), estado);
   }
 
   @Get(':id')

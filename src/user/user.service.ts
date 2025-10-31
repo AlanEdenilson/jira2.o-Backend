@@ -42,6 +42,8 @@ export class UserService {
     }
     this.repository.merge(project, updateUserDto);
 
+    
+
     const result = await this.repository.save(project);
 
     return result;

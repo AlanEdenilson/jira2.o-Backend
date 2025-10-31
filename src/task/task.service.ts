@@ -5,6 +5,11 @@ import { Task } from './entities/task.entity';
 import { Repository } from 'typeorm';
 import { Response } from '../Response';
 
+export enum TaskStatus {
+  COMPLETADO = 'completado',
+  EN_PROCESO = 'enproceso',
+}
+
 @Injectable()
 export class TaskService {
   constructor(
@@ -70,7 +75,12 @@ export class TaskService {
       },
       skip: (page - 1) * pageSize,
       take: pageSize,
+      relations: {
+        user: true,
+      },
     });
+
+    console.log(result);
 
     return {
       status: 200,
@@ -146,5 +156,36 @@ export class TaskService {
     } catch (error) {
       throw new Error('error al borrar el proyecto');
     }
+  }
+
+  async findForParametros(
+    project: number,
+    estado: TaskStatus,
+  ): Promise<Response> {
+    /*const [result, total] = await this.repository
+      .createQueryBuilder()
+      .where('Project.isActive = :estado', { estado: true })
+      .skip((page - 1) * pageSize)
+      .take(pageSize)
+      .getManyAndCount();*/
+
+    const [result, total] = await this.repository.findAndCount({
+      where: {
+        isActive: true,
+        project: { id: project },
+        status: estado,
+      },
+      relations: {
+        user: true,
+      },
+    });
+
+    return {
+      status: 200,
+      ok: true,
+      message: 'Tareas encontradas con exito',
+      data: result,
+      total: total,
+    };
   }
 }

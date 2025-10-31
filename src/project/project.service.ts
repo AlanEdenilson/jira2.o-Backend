@@ -13,7 +13,7 @@ export class ProjectService {
     private repository: Repository<Project>,
   ) {}
 
-  async create(createProjectDto: CreateProjectDto):Promise< Response> {
+  async create(createProjectDto: CreateProjectDto): Promise<Response> {
     return {
       status: 201,
       ok: true,
@@ -86,10 +86,13 @@ export class ProjectService {
   }
 
   async remove(id: number): Promise<Response> {
+    console.log('borrando el proyecto');
     try {
       const project = await this.repository.findOne({
-        where: { id, isActive: true },
+        where: { id: id, isActive: true },
       });
+
+      console.log(project);
 
       if (!project) {
         throw new Error('proyecto no encontrado no encontrada');
@@ -110,6 +113,7 @@ export class ProjectService {
       };
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
+      console.log(error);
       throw new Error('error al borrar el proyecto');
     }
   }

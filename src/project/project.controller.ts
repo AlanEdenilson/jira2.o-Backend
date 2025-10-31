@@ -21,20 +21,21 @@ export class ProjectController {
     try {
       return this.projectService.create(createProjectDto);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       return {
-      status: 500,
-      ok: true,
-      message: 'Error ene l servidor',
-      data: error,
-    };
-      
+        status: 500,
+        ok: true,
+        message: 'Error ene l servidor',
+        data: error as unknown,
+      };
     }
-    
   }
 
   @Get()
-  async findAll(@Query('page') page: string, @Query('pageSize') pageSize: string) {
+  async findAll(
+    @Query('page') page: string,
+    @Query('pageSize') pageSize: string,
+  ) {
     try {
       return this.projectService.findAll(+page, +pageSize);
     } catch (error) {
