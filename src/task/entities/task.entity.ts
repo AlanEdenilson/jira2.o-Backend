@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 
 export enum TaskStatus {
+  NEW = 'new',
   COMPLETADO = 'completado',
   EN_PROCESO = 'enproceso',
 }
@@ -29,7 +30,7 @@ export class Task {
   @Column({
     type: 'enum',
     enum: TaskStatus,
-    default: TaskStatus.EN_PROCESO,
+    default: TaskStatus.NEW,
   })
   status: TaskStatus;
 
